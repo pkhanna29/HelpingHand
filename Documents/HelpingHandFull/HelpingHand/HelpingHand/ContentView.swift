@@ -2,7 +2,8 @@ import SwiftUI
 
 struct ContentView: View {
     // You can restore your @State variables (like activeSheet) here as you build out the button logic
-    
+    @State private var showReportIssue = false
+
     var body: some View {
         ZStack {
             // 1. The custom black-and-white map base
@@ -13,6 +14,17 @@ struct ContentView: View {
             VStack {
                 // Top Navigation: My Impact Shortcut
                 HStack {
+                    Button(action: { showReportIssue = true }) {
+                        Image(systemName: "exclamationmark.bubble")
+                            .font(.title3)
+                            .foregroundColor(.primary)
+                            .padding(12)
+                            .background(.ultraThinMaterial)
+                            .clipShape(Circle())
+                            .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+                    }
+                    .accessibilityLabel("Report an issue")
+
                     Spacer()
                     Button(action: {
                         // Action to open Saved regions
@@ -51,6 +63,9 @@ struct ContentView: View {
                 .shadow(color: .black.opacity(0.1), radius: 8, y: 4)
             }
             .padding(.bottom, 34) // Keeps the pill safely above the iOS home indicator
+        }
+        .sheet(isPresented: $showReportIssue) {
+            ReportIssueView()
         }
     }
 }

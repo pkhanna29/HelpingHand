@@ -4,7 +4,8 @@ import MapKit
 struct PhysicalAidDropOffView: View {
     let requirements: [PhysicalAidRequirement] // Pulled from your backend
     @Environment(\.dismiss) var dismiss
-    
+    @State private var showReportIssue = false
+
     // Sample drop-off point for the map
     @State private var cameraPosition: MapCameraPosition = .region(
         MKCoordinateRegion(
@@ -75,8 +76,19 @@ struct PhysicalAidDropOffView: View {
                         }
                         .padding(.vertical, 4)
                     }
+
+                    Section {
+                        Button(action: { showReportIssue = true }) {
+                            Label("Report incorrect info", systemImage: "exclamationmark.bubble")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 }
                 .listStyle(.insetGrouped)
+            }
+            .sheet(isPresented: $showReportIssue) {
+                // TODO: pass the real drop-off point's id/name once this view uses backend data
+                ReportIssueView(target: ReportTarget(type: .dropoff, id: nil, name: "Red Cross Logistics Center"))
             }
             .navigationTitle("Contribute Supplies")
             .navigationBarTitleDisplayMode(.inline)
